@@ -3,6 +3,10 @@ import image
 
 
 class BaseConfiguration:
+    """
+    Base class for configuration files.
+    """
+
     def __init__(self, filepath):
         self.filepath = filepath
         with open(filepath, 'r') as f:
@@ -19,6 +23,9 @@ class BaseConfiguration:
 
 
 class Metadata(BaseConfiguration):
+    """
+    Class for metadata.json file.
+    """
     FIELDS_INCLUDED = {
         'NAME': str,
         'IMAGE': str,
@@ -36,6 +43,9 @@ class Metadata(BaseConfiguration):
 
 
 class Parameters(BaseConfiguration):
+    """
+    Class for params.json file.
+    """
     FIELDS_INCLUDED = {
         'USERFILES_DIR': str,
         'PARAMS': dict
