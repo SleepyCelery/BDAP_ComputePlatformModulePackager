@@ -6,8 +6,12 @@ from loguru import logger
 from tempfile import TemporaryDirectory
 
 
-# 检查目录内是否包含metadata.json文件、params.json文件、Docker镜像文件
 def check_integrity(directory_name):
+    """
+    Check if the directory contains metadata.json, params.json and a Docker image tar file
+    :param directory_name: the directory to check
+    :return: boolean
+    """
     try:
         files = os.listdir(directory_name)
     except FileNotFoundError:
@@ -27,8 +31,12 @@ def check_integrity(directory_name):
     return True
 
 
-# 将指定目录下的文件压缩为后缀名为cpm的zip文件
 def pack(directory_name):
+    """
+    Pack a directory as a cpm file
+    :param directory_name: the directory to pack
+    :return: none
+    """
     try:
         with zipfile.ZipFile(f'{directory_name}.cpm', 'w') as f:
             for root, dirs, files in os.walk(directory_name):
@@ -40,6 +48,11 @@ def pack(directory_name):
 
 
 def unpack(cpm_file):
+    """
+    Unpack a cpm file to current work directory
+    :param cpm_file: the cpm file to unpack
+    :return: none
+    """
     try:
         with zipfile.ZipFile(cpm_file, 'r') as f:
             f.extractall()
@@ -51,6 +64,11 @@ def unpack(cpm_file):
 
 # 从cpm文件中提取出metadata内容，保存到临时目录中，再使用configuration.Metadata类进行读取
 def extract_metadata_from_cpm_file(cpm_file):
+    """
+    Extract metadata from a cpm file
+    :param cpm_file: cpm file path
+    :return: metadata dict
+    """
     try:
         with TemporaryDirectory() as temp_dir:
             with zipfile.ZipFile(cpm_file, 'r') as f:
