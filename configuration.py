@@ -47,7 +47,7 @@ class Parameters(BaseConfiguration):
     Class for params.json file.
     """
     FIELDS_INCLUDED = {
-        'USERFILES_DIR': str,
+        'TASKFILES_DIR': str,
         'PARAMS': dict
     }
     PARAMS_TYPES = ['string', 'file', 'number', 'enum', 'boolean']
@@ -58,10 +58,12 @@ class Parameters(BaseConfiguration):
                 raise ValueError(f'Field {field} not found in params.json')
             if type(value) != self.FIELDS_INCLUDED[field]:
                 raise ValueError(f'Field {field} should be {self.FIELDS_INCLUDED[field]} type')
-        for param_name, (param_type, param_description) in self.data['PARAMS'].items():
-            if param_type not in self.PARAMS_TYPES:
+        for param_name, params in self.data['PARAMS'].items():
+            if params[1] not in self.PARAMS_TYPES:
                 raise ValueError(
-                    f'Invalid param type {param_type} for param {param_name}, should be one of {self.PARAMS_TYPES}')
+                    f'Invalid param type {params[1]} for param {param_name}, should be one of {self.PARAMS_TYPES}')
+            if params[1] == 'enum' and not isinstance(params[3], list):
+                raise ValueError(f'Param {param_name} is enum type but has no options')
 
     def consistency_check(self, docker_image_tar_path):
         if not image.is_docker_image_tar(docker_image_tar_path):

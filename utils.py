@@ -24,9 +24,9 @@ def check_integrity(directory_name):
         return False
     if 'params.json' not in files:
         return False
-    if image.find_tarfile('.') is None:
+    if image.find_tarfile(directory_name) is None:
         return False
-    if not image.is_docker_image_tar(image.find_tarfile('.')):
+    if not image.is_docker_image_tar(image.find_tarfile(directory_name)):
         return False
     return True
 
