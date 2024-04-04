@@ -43,7 +43,8 @@ class Command:
         :param cpm_directory_name:
         :return:
         """
-        if not utils.check_integrity(cpm_directory_name):
+        illegal_name = {'.', '..', 'metadata.json', 'params.json'}
+        if not utils.check_integrity(cpm_directory_name) or cpm_directory_name in illegal_name:
             logger.error(f'Folder {cpm_directory_name} is not a valid CPM folder')
             return
         try:
