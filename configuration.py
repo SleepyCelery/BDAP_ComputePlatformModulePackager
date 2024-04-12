@@ -1,5 +1,7 @@
 import json
 import image
+import os
+import re
 
 
 class BaseConfiguration:
@@ -58,12 +60,23 @@ class Parameters(BaseConfiguration):
                 raise ValueError(f'Field {field} not found in params.json')
             if type(value) != self.FIELDS_INCLUDED[field]:
                 raise ValueError(f'Field {field} should be {self.FIELDS_INCLUDED[field]} type')
+            if field == 'TASKFILES_DIR':
+                if not os.path.isabs(value):
+                    raise ValueError(f'TASKFILES_DIR {value} is not an absolute path')
+                if not re.match(r'^(/[^/ ]*)+/?$', value):
+                    raise ValueError(f'TASKFILES_DIR {value} is not a valid Linux path')
         for param_name, params in self.data['PARAMS'].items():
             if params[1] not in self.PARAMS_TYPES:
                 raise ValueError(
                     f'Invalid param type {params[1]} for param {param_name}, should be one of {self.PARAMS_TYPES}')
-            if params[1] == 'enum' and not isinstance(params[3], list):
-                raise ValueError(f'Param {param_name} is enum type but has no options')
+            if params[1] == 'enum':
+                if len(params) != 5:
+                    raise ValueError(f'Length of params for enum type should be 5')
+                if not isinstance(params[3], list):
+                    raise ValueError(f'Param {param_name} is enum type but has no options')
+            else:
+                if len(params) != 4:
+                    raise ValueError(f'Length of params for non-enum type should be 4')
 
     def consistency_check(self, docker_image_tar_path):
         if not image.is_docker_image_tar(docker_image_tar_path):

@@ -7,7 +7,7 @@ METADATA_JSON_TEMPLATE = {
 }
 
 PARAMS_JSON_TEMPLATE = {
-    'TASKFILES_DIR': '<用户目录挂载的路径，平台使用该模块创建容器时会将用户的存储目录挂载到该路径，容器内应用程序于此目录读取用户数据，如/userdata。字符串类型>',
+    'TASKFILES_DIR': '<用户目录挂载的路径，平台使用该模块创建容器时会将用户的存储目录挂载到该路径，容器内应用程序于此目录读取任务数据，该字段必须为绝对路径，且要符合Linux系统下的路径命名规则，如/userdata。字符串类型>',
     'PARAMS': {
         '<运行参数1环境变量名>': ['<运行参数1的别名，字符串类型>',
                                   '<运行参数1的值类型，可以为string/file/number/enum/boolean，字符串类型>',
